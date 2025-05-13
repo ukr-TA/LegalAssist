@@ -1,4 +1,26 @@
-__pycache__
+# Python
+__pycache__/
+*.py[cod]
+*.pkl  # Pickle files
+*.faiss  # FAISS index files if temporary
 
-# instance
+# Environment
+.env
+.venv/
 
+# Node.js
+node_modules/
+
+# VS Code
+.vscode/
+
+# Logs & OS
+*.log
+.DS_Store
+Thumbs.db
+
+# Vector database (optional if auto-generated)
+vectordb/
+
+# Ignore firebase key
+firebase_key.json
