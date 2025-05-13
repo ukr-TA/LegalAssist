@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal Assistant Chat - LegalAssist</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+ <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"> -->
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Header -->
+ <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="/templates/index.html" class="logo">Legal<span>Assist</span></a>
+                <button class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <ul class="nav-links">
+                    <li><a href="/templates/index.html">Home</a></li>
+                    <li><a href="index.html#domains">Law Domains</a></li>
+                    <li><a href="index.html#about">About</a></li>
+                    <!-- {% if 'username' in session %} --> 
+                      <li><a href="/templates/firstpage.html" class="btn btn-outline">Logout</a></li> 
+                    <!-- {% else %} -->
+                        <!-- <li><a href="login.html" class="btn btn-outline">Switch Accounts</a></li> 
+                        <li><a href="signup.html" class="btn btn-primary">Sign Up</a></li>  -->
+                    <!-- {% endif %} -->
+     </ul>
+            </nav>
+        </div>
+    </header>
+<!-- Flash Messages 
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="container mt-3">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %} -->
+
+<!-- Chat Interface --> 
+<div class="container-fluid p-0">
+        <div class="chat-main">
+            <!-- Sidebar -->
+          <aside class="chat-sidebar">
+                <h3 class="sidebar-title">Law Domains</h3>
+                <ul class="domains-list">
+                    <li class="domain-item active">
+                   <div class="domain-item-icon"> 
+                        <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <span class="domain-item-title">Cyber Law</span>
+                    </li>
+                    <li class="domain-item disabled">
+                        <div class="domain-item-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <span class="domain-item-title">Family Law</span>
+                    </li>
+                    <li class="domain-item disabled">
+                        <div class="domain-item-icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <span class="domain-item-title">Corporate Law</span>
+                    </li>
+                    <li class="domain-item disabled">
+                        <div class="domain-item-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <span class="domain-item-title">Property Law</span>
+                    </li>
+                    <li class="domain-item disabled">
+                        <div class="domain-item-icon">
+                            <i class="fas fa-gavel"></i>
+                        </div>
+                        <span class="domain-item-title">Criminal Law</span>
+                    </li>
+                    <li class="domain-item disabled">
+                        <div class="domain-item-icon">
+                            <i class="fas fa-passport"></i>
+                        </div>
+                        <span class="domain-item-title">Immigration Law</span>
+                    </li>
+                </ul>
+                
+                <div class="mt-4">
+                    <h3 class="sidebar-title">Tips</h3>
+                    <div class="p-2 text-white-50">
+                        <p><small>Ask specific questions about cyber law topics such as:</small></p>
+                        <ul style="font-size: 0.8rem;">
+                            <li>Data protection rights</li>
+                            <li>Cybercrime definitions</li>
+                            <li>Digital intellectual property</li>
+                            <li>Online privacy regulations</li>
+                            <li>Digital contracts and signatures</li>
+                        </ul>
+                    </div>
+                </div>
+            </aside>
+            
+            Chat Content
+            <div class="chat-content">
+                <div class="chat-header">
+                    <button class="toggle-sidebar-btn">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="chat-title">
+                <span class="current-domain">Cyber Law</span> Assistant
+                    </div>
+                    <div class="user-info">
+                        Welcome, {{ username }}!
+                    </div>
+                </div>
+                <div class="chat-body">
+                    <!-- Messages will be added here dynamically -->
+                </div>
+                <div class="chat-input">
+                    <input type="text" class="chat-input-field" placeholder="Type your message here...">
+                    <button class="chat-send-btn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+ </div>
+ </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/chatbot.js') }}"></script>
+
+    <script>
+        // Temporary debug script to test chat functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Debug script loaded');
+            
+            const chatBody = document.querySelector('.chat-body');
+            const chatInputField = document.querySelector('.chat-input-field');
+            const chatSendBtn = document.querySelector('.chat-send-btn');
+            
+            // Add a debug message to the chat
+            function addDebugMessage() {
+                const debugElement = document.createElement('div');
+                debugElement.className = 'message message-bot';
+                debugElement.innerHTML = `
+                    <div class="message-content"></div>
+                    <div class="message-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                `;
+                chatBody.appendChild(debugElement);
+            }
+            
+            // Test simple message sending
+            function sendDebugMessage() {
+                const message = chatInputField.value.trim();
+                
+                if (message === '') return;
+                
+                // Add user message
+                const userMessageElement = document.createElement('div');
+                userMessageElement.className = 'message message-user';
+                userMessageElement.innerHTML = `
+                    <div class="message-content">${message}</div>
+                    <div class="message-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                `;
+                
+                chatBody.appendChild(userMessageElement);
+                
+                // Clear input
+                chatInputField.value = '';
+                
+                // Scroll to bottom
+                chatBody.scrollTop = chatBody.scrollHeight;
+                
+                // Add echo response after delay
+                setTimeout(() => {
+                    const botMessageElement = document.createElement('div');
+                    botMessageElement.className = 'message message-bot';
+                    botMessageElement.innerHTML = `
+                        <div class="message-content">You said: "${message}"</div>
+                        <div class="message-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                    `;
+                    
+                    chatBody.appendChild(botMessageElement);
+                    chatBody.scrollTop = chatBody.scrollHeight;
+                }, 500);
+            }
+            
+            // Add debug message on load
+            addDebugMessage();
+            
+            // Set up event listeners
+            if (chatSendBtn) {
+                chatSendBtn.addEventListener('click', sendDebugMessage);
+                console.log('Send button event listener attached');
+            } else {
+                console.error('Send button not found');
+            }
+            
+            if (chatInputField) {
+                chatInputField.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        sendDebugMessage();
+                    }
+                });
+                console.log('Input field event listener attached');
+            } else {
+                console.error('Input field not found');
+            }
+        });
+        </script>
+
+
+</body>
+</html> 
