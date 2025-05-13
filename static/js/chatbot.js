@@ -155,12 +155,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const delay = Math.floor(Math.random() * 1000) + 1000;
         
         setTimeout(() => {
-            fetch('/api/chat', {
+            const token = localStorage.getItem('token'); // Get the Firebase ID token
+            fetch('http://127.0.0.1:8000/chat', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({ message: message })
+                body: JSON.stringify({ user_message: message })  // Match backend's expected key
             })
             .then(response => {
                 if (!response.ok) {
