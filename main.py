@@ -17,7 +17,7 @@ app = FastAPI()
 # CORS setup
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:5500"],  # Replace with frontend domain
+    allow_origins=["http://127.0.0.1:8000"],  # Replace with frontend domain
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -25,6 +25,25 @@ app.add_middleware(
 
 # OAuth2 token scheme
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+from fastapi.responses import JSONResponse
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+@app.get("/firebase-config")
+async def get_firebase_config():
+    return JSONResponse({
+        "apiKey": os.getenv("FIREBASE_API_KEY"),
+        "authDomain": os.getenv("FIREBASE_AUTH_DOMAIN"),
+        "projectId": os.getenv("FIREBASE_PROJECT_ID"),
+        "appId": os.getenv("FIREBASE_APP_ID"),
+        "storageBucket": os.getenv("FIREBASE_STORAGE_BUCKET"),
+        "messagingSenderId": os.getenv("FIREBASE_MSG_SENDER_ID"),
+        "measurementId": os.getenv("FIREBASE_MEASUREMENT_ID"),
+    })
+
 
 # Pydantic models
 class UserSignup(BaseModel):

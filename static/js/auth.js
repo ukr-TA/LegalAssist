@@ -1,46 +1,61 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Form validation for login form
-    const loginForm = document.getElementById('login-form');
+let firebaseApp = null;
+
+document.addEventListener("DOMContentLoaded", async function () {
+    // Fetch Firebase config from FastAPI (NOT the 5500 frontend path)
+    const response = await fetch("http://127.0.0.1:8000/firebase-config");
+    const firebaseConfig = await response.json();
+    firebase.initializeApp(firebaseConfig);
+    firebaseApp = firebase.app();
+
+    // ----------------- LOGIN ------------------
+    const loginForm = document.getElementById("login-form");
     if (loginForm) {
-        loginForm.addEventListener('submit', function(event) {
-            const username = document.getElementById('username').value.trim();
-            const password = document.getElementById('password').value.trim();
-            
-            let isValid = true;
-            
-            // Clear previous error messages
+        loginForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+            const email = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value.trim();
+
             clearErrors();
-            
-            if (username === '') {
-                displayError('username', 'Username is required');
+            let isValid = true;
+
+            if (email === '') {
+                displayError('username', 'Email is required');
                 isValid = false;
             }
-            
+
             if (password === '') {
                 displayError('password', 'Password is required');
                 isValid = false;
             }
-            
-            if (!isValid) {
-                event.preventDefault();
+
+            if (!isValid) return;
+
+            try {
+                const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+                const token = await userCredential.user.getIdToken();
+                localStorage.setItem("token", token);
+                alert("Login successful!");
+                window.location.href = "/chat.html";
+            } catch (error) {
+                alert("Login failed: " + error.message);
+                return;
             }
         });
     }
-    
-    // Form validation for signup form
-    const signupForm = document.getElementById('signup-form');
+
+    // ----------------- SIGNUP ------------------
+    const signupForm = document.getElementById("signup-form");
     if (signupForm) {
-        signupForm.addEventListener('submit', function(event) {
-            const username = document.getElementById('username').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value.trim();
-            const confirmPassword = document.getElementById('confirm_password').value.trim();
-            
-            let isValid = true;
-            
-            // Clear previous error messages
+        signupForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+            const username = document.getElementById("username").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const confirmPassword = document.getElementById("confirm_password").value.trim();
+
             clearErrors();
-            
+            let isValid = true;
+
             if (username === '') {
                 displayError('username', 'Username is required');
                 isValid = false;
@@ -48,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 displayError('username', 'Username must be at least 3 characters');
                 isValid = false;
             }
-            
+
             if (email === '') {
                 displayError('email', 'Email is required');
                 isValid = false;
@@ -56,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 displayError('email', 'Please enter a valid email address');
                 isValid = false;
             }
-            
+
             if (password === '') {
                 displayError('password', 'Password is required');
                 isValid = false;
@@ -64,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 displayError('password', 'Password must be at least 6 characters');
                 isValid = false;
             }
-            
+
             if (confirmPassword === '') {
                 displayError('confirm_password', 'Please confirm your password');
                 isValid = false;
@@ -72,14 +87,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 displayError('confirm_password', 'Passwords do not match');
                 isValid = false;
             }
-            
-            if (!isValid) {
-                event.preventDefault();
+
+            if (!isValid) return;
+
+            try {
+                const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+                await userCredential.user.updateProfile({ displayName: username });
+                alert("Signup successful!");
+                window.location.href = "/login.html";
+            } catch (error) {
+                displayError('email', error.message);
             }
         });
     }
-    
-    // Helper functions
+
+    // ----------------- Helpers ------------------
     function displayError(fieldId, message) {
         const field = document.getElementById(fieldId);
         const errorDiv = document.createElement('div');
@@ -88,48 +110,70 @@ document.addEventListener('DOMContentLoaded', function() {
         errorDiv.style.fontSize = '0.875rem';
         errorDiv.style.marginTop = '0.25rem';
         errorDiv.textContent = message;
-        
+
         field.classList.add('error');
         field.style.borderColor = '#e74c3c';
-        
         field.parentNode.appendChild(errorDiv);
     }
-    
+
     function clearErrors() {
-        const errorMessages = document.querySelectorAll('.error-message');
-        errorMessages.forEach(function(error) {
-            error.remove();
-        });
-        
-        const errorFields = document.querySelectorAll('.error');
-        errorFields.forEach(function(field) {
+        document.querySelectorAll('.error-message').forEach(el => el.remove());
+        document.querySelectorAll('.error').forEach(field => {
             field.classList.remove('error');
             field.style.borderColor = '';
         });
     }
-    
+
     function isValidEmail(email) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
     }
-    
+
     // Password visibility toggle
-    const togglePasswordButtons = document.querySelectorAll('.toggle-password');
-    togglePasswordButtons.forEach(function(button) {
-        button.addEventListener('click', function() {
+    document.querySelectorAll('.toggle-password').forEach(button => {
+        button.addEventListener('click', function () {
             const passwordField = document.getElementById(this.getAttribute('data-toggle'));
             const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
             passwordField.setAttribute('type', type);
-            
-            // Change the icon
             const icon = this.querySelector('i');
             if (type === 'text') {
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
             } else {
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
             }
         });
     });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

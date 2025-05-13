@@ -30,19 +30,6 @@
         </div>
     </header>
 
-    <!-- Flash Messages -->
-    <!-- {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div class="container mt-3">
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %} 
-    {% endwith %} -->
-
     <!-- Login Form -->
     <div class="container">
         <div class="form-container">
@@ -143,7 +130,26 @@
         </script>
 
     <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script> -->
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+<!-- Your custom JavaScript files -->
+<script src="/static/js/main.js" defer></script>
+<script src="/static/js/auth.js" defer></script>
+
+<!-- Firebase SDKs (v8) -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+
+<!-- Initialize Firebase from FastAPI config -->
+<!-- <script>
+  fetch("http://127.0.0.1:8000/firebase-config")
+    .then(response => response.json())
+    .then(config => {
+      firebase.initializeApp(config);
+      console.log("✅ Firebase initialized");
+    })
+    .catch(error => {
+      console.error("❌ Firebase config load failed:", error);
+    });
+</script> -->
+
 </body>
 </html>
