@@ -111,7 +111,8 @@
                     <!-- Messages will be added here dynamically -->
                 </div>
                 <div class="chat-input">
-                    <input type="text" class="chat-input-field" placeholder="Type your message here...">
+                    <!-- <input type="text" class="chat-input-field" placeholder="Type your message here..."> -->
+                     <textarea class="chat-input-field" placeholder="Type your message here..."></textarea>
                     <button class="chat-send-btn">
                         <i class="fas fa-paper-plane"></i>
                     </button>
@@ -125,84 +126,96 @@
     <script src="{{ url_for('static', filename='js/chatbot.js') }}"></script>
 
     <script>
-        // Temporary debug script to test chat functionality
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Debug script loaded');
-            
-            const chatBody = document.querySelector('.chat-body');
-            const chatInputField = document.querySelector('.chat-input-field');
-            const chatSendBtn = document.querySelector('.chat-send-btn');
-            
-            // Add a debug message to the chat
-            function addDebugMessage() {
-                const debugElement = document.createElement('div');
-                debugElement.className = 'message message-bot';
-                debugElement.innerHTML = `
-                    <div class="message-content"></div>
-                    <div class="message-time"></div>
-                `;
-                chatBody.appendChild(debugElement);
-            }
-            
-            // Test simple message sending
-            function sendDebugMessage() {
-                const message = chatInputField.value.trim();
-                
-                if (message === '') return;
-                
-                // Add user message
-                const userMessageElement = document.createElement('div');
-                userMessageElement.className = 'message message-user';
-                userMessageElement.innerHTML = `
-                    <div class="message-content">${message}</div>
-                    <div class="message-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
-                `;
-                
-                chatBody.appendChild(userMessageElement);
-                
-                // Clear input
-                chatInputField.value = '';
-                
-                // Scroll to bottom
-                chatBody.scrollTop = chatBody.scrollHeight;
-                
-                // Add echo response after delay
-                setTimeout(() => {
-                    const botMessageElement = document.createElement('div');
-                    botMessageElement.className = 'message message-bot';
-                    botMessageElement.innerHTML = `
-                        <div class="message-content">You said: "${message}"</div>
-                        <div class="message-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
-                    `;
-                    
-                    chatBody.appendChild(botMessageElement);
-                    chatBody.scrollTop = chatBody.scrollHeight;
-                }, 500);
-            }
-            
-            // Add debug message on load
-            addDebugMessage();
-            
-            // Set up event listeners
-            if (chatSendBtn) {
-                chatSendBtn.addEventListener('click', sendDebugMessage);
-                console.log('Send button event listener attached');
+    console.log('Chat script loaded');
+    
+    const chatBody = document.querySelector('.chat-body');
+    const chatInputField = document.querySelector('.chat-input-field');
+    const chatSendBtn = document.querySelector('.chat-send-btn');
+    
+    // Make sure we have all required elements
+    if (!chatBody || !chatInputField || !chatSendBtn) {
+        console.error('Required chat elements not found');
+        return;
+    }
+    
+    // Function to get current time in HH:MM format
+    function getCurrentTime() {
+        return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+    
+    // Function to add a message to the chat
+    function addMessageToChat(content, isUser = false) {
+        const messageElement = document.createElement('div');
+        messageElement.className = isUser ? 'message message-user' : 'message message-bot';
+        
+        // Create HTML for the message with content and time
+        messageElement.innerHTML = `
+            <div class="message-content">${content}</div>
+            <div class="message-time">${getCurrentTime()}</div>
+        `;
+        
+        // Add message to chat body
+        chatBody.appendChild(messageElement);
+        
+        // Scroll to the bottom
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }
+    
+    // Function to send message
+    function sendMessage() {
+        const message = chatInputField.value.trim();
+        if (message === '') return;
+        
+        // Add user message to chat
+        addMessageToChat(message, true);
+        
+        // Clear the input field
+        chatInputField.value = '';
+        
+        // Reset input height if auto-growing
+        chatInputField.style.height = 'auto';
+        
+        // Simulate bot response after a short delay
+        setTimeout(() => {
+            const botReply = `You said: "${message}"`;
+            addMessageToChat(botReply, false);
+        }, 500);
+    }
+    
+    // Handle Shift+Enter vs Enter in the textarea
+    chatInputField.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            if (e.shiftKey) {
+                // Allow default behavior (new line) when Shift+Enter is pressed
+                console.log('New line created with Shift+Enter');
             } else {
-                console.error('Send button not found');
+                // Prevent default behavior and send message
+                e.preventDefault();
+                sendMessage();
+                console.log('Message sent with Enter');
             }
-            
-            if (chatInputField) {
-                chatInputField.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        sendDebugMessage();
-                    }
-                });
-                console.log('Input field event listener attached');
-            } else {
-                console.error('Input field not found');
-            }
-        });
+        }
+    });
+    
+    // Send button click handler
+    chatSendBtn.addEventListener('click', function() {
+        sendMessage();
+        console.log('Message sent with send button');
+    });
+    
+    // Auto-resize the textarea as user types (optional)
+    chatInputField.addEventListener('input', function() {
+        // Reset height to get the correct scrollHeight
+        this.style.height = 'auto';
+        
+        // Set new height based on content (with max height limit)
+        const newHeight = Math.min(this.scrollHeight, 120);
+        this.style.height = newHeight + 'px';
+    });
+    
+    console.log('Chat event listeners attached');
+});
         </script>
 
 
