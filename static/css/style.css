@@ -534,7 +534,13 @@ a:hover {
     font-size: inherit;
     line-height: 1.4;
 }
-
+#chat-place{
+    
+    /* text-align: center; */
+    /* align-items: center; */
+    padding: 10px;
+    height: 45px;
+}
 
 /* .chat-send-btn {
     background: #3498db;
