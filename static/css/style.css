@@ -496,7 +496,7 @@ a:hover {
     position: sticky;
     bottom: 0;
     background-color: #ECF0F1;
-    padding: 0px 15px 15px 15px;
+    padding: 0px 8rem 33px 9rem;
     display: flex;
     align-items: center;
 }
