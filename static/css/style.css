@@ -520,7 +520,7 @@ a:hover {
 
 .chat-input-field {
     flex: 1;
-    padding: 12px 15px;
+    padding: 1px 15px;
     border-radius: 20px;
     border: 1px solid #ccc;
     outline: none;
@@ -727,7 +727,9 @@ a:hover {
 .chat-input-field:focus {
     border-color: var(--secondary-color);
     outline: none;
+    text-align: left;
 }
+
 
 /* .chat-send-btn {
     background-color: var(--secondary-color);
