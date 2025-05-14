@@ -683,6 +683,13 @@ a:hover {
     text-align: right;
 }
 
+ .chat-body > time, 
+  .chat-body > .message-time,
+  .chat-body:not(.message) > :contains("11:00 PM") {
+    display: none !important;
+  }
+
+
 /* .chat-input {
     padding: 1rem;
     background-color: white;
