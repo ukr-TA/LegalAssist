@@ -84,6 +84,9 @@ Provide the answer following the exact format above.
 
 Answer:
 """
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+    vectordb = load_vectorstore(embeddings)
+    
     response = model.generate_content(prompt, generation_config={"temperature": 0, "max_output_tokens": 500})
     return response.text
 
