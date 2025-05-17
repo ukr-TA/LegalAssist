@@ -51,7 +51,7 @@
                 <h1 class="hero-title animate-on-scroll">Your AI-Powered Legal Assistant</h1>
                 <p class="hero-subtitle animate-on-scroll">Get expert advice on cyber law matters with our intelligent chatbot</p>
                 <div class="hero-btns animate-on-scroll">
-                    <a href="{{ url_for('chat_bot_page') }}" class="btn btn-primary">Get Started Now</a>
+                    <a href="chat.html" class="btn btn-primary">Get Started Now</a>
 
                     <!-- <a href="login.html" class="btn btn-outline">Login</a> -->
                 </div>
@@ -102,13 +102,16 @@
         <div class="container">
             <h2 class="section-title animate-on-scroll">Law Domains</h2>
             <div class="domains-grid">
-                <div class="domain-card active animate-on-scroll" data-domain="cyber">
+                
+                <a href="describe.html" style="text-decoration: none; color: inherit;">
+                <div class="domain-card" style="cursor: pointer;">
                     <div class="domain-icon">
-                        <img src="/static/svg/cybersecurity.svg" alt="Cyber Law">
+                    <img src="/static/svg/cybersecurity.svg" alt="Cyber Law">
                     </div>
                     <h3 class="domain-title">Cyber Law</h3>
                     <p class="domain-description">Legal issues related to internet, technology, and digital space.</p>
                 </div>
+                </a>
                 <div class="domain-card disabled animate-on-scroll" data-domain="family">
                     <div class="domain-icon">
                         <img src="/static/svg/family.svg" alt="Family Law">
@@ -215,7 +218,7 @@
     </section>
 
     <!-- Call to Action -->
-    <section ">
+    <section >
         <div class="container">
             <div class="hero-content text-center">
                 <h2 class="mb-4 animate-on-scroll">Ready to Get Started?</h2>
@@ -263,6 +266,9 @@
             </div>
         </div>
     </footer>
+
+    
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>

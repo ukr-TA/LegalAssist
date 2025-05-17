@@ -44,7 +44,7 @@
                     <input type="email" id="email" name="email" class="form-input" placeholder="Enter your email">
                 </div>
                 <div class="form-group">
-                    <label for="password" class="form-label">Password</label>
+                    <label for="password" class="form-label" >Password</label>
                     <div class="position-relative">
                         <input type="password" id="password" name="password" class="form-input" placeholder="Create a password">
                         <button type="button" class="toggle-password btn position-absolute" style="right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none;" data-toggle="password">
@@ -112,6 +112,20 @@
 
 
     <script>
+        document.querySelectorAll('.toggle-password').forEach(button => {
+            button.addEventListener('click', function () {
+            const inputId = this.getAttribute('data-toggle');
+            const inputField = document.getElementById(inputId);
+
+            if (inputField.type === 'password') {
+                inputField.type = 'text';
+                this.innerHTML = '<i class="fas fa-eye-slash"></i>';
+            } else {
+                inputField.type = 'password';
+                this.innerHTML = '<i class="fas fa-eye"></i>';
+            }
+            });
+        });
         function validateAndRedirect() {
             // Get form values
             const username = document.getElementById('username').value;
