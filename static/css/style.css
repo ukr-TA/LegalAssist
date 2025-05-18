@@ -340,7 +340,7 @@ a:hover {
   margin-right: 0.75rem;
 }
 .domain-item-title {
-  font-size: 1.1rem;
+  font-size: 1.0rem;
 }
 .domain-icon {
     width: 80px;
@@ -372,6 +372,10 @@ a:hover {
     font-weight: 700;
     opacity: 0;
     transition: var(--transition);
+}
+
+.domain-card.disabled:hover .coming-soon {
+    opacity: 1;
 }
 /* Form Styles */
 .form-container {
@@ -627,6 +631,8 @@ position: relative;
 /* content: "Coming Soon"; */
 }
 
+
+
  .domain-item.disabled:hover::after {
   content: "Coming Soon";
   position: absolute;
@@ -715,8 +721,8 @@ position: relative;
 .footer-content {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 2rem;
+    justify-content: space-around;
+    gap: 10rem;
 }
 
 .footer-section {
@@ -737,6 +743,11 @@ position: relative;
 
 .footer-links li {
     margin-bottom: 0.5rem;
+}
+
+ul.footer-links{
+    margin: 0;
+    padding: 0;
 }
 
 .footer-links a {
